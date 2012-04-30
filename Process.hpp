@@ -5,6 +5,9 @@
 #include <sys/poll.h>
 #include <iostream>
 #include <vector>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define PARENT_READ m_readpipe[0]
 #define CHILD_WRITE m_readpipe[1]
