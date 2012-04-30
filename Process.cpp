@@ -21,10 +21,10 @@ Process::Process(const std::vector<char*>& args, bool verbose) :
 	if(pipe(m_readpipe) < 0)
 	{
 		perror("Unable to make pipe for reading");
-		throw std::string("Unable to make pipe for reading";
+		throw std::string("Unable to make pipe for reading");
 	}
 	
-	m_pid = fork()
+	m_pid = fork();
 
 	if(m_pid < 0)
 	{
@@ -55,12 +55,12 @@ Process::Process(const std::vector<char*>& args, bool verbose) :
 
 Process::~Process()
 {
-	if(verbrose)
+	if(verbose)
 	{
 		std::cerr << "Process '" << m_name << "': Entering ~Process()" << std::endl;
 	}
 	kill(m_pid, SIGTERM);
-	fclose(m_pwrite);i
+	fclose(m_pwrite);
 	int status;
 	pid_t pid = waitpid(m_pid, &status, 0);
 	if(pid < 0)
