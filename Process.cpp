@@ -5,11 +5,12 @@
 #include "Process.hpp"
 
 Process::Process(const std::vector<char*>& args, bool verbose) :
-	m_name(args[0])
-	m_pid((pid_t)NULL)
-	m_writepipe {-1, -1}
-	m_readpipe {-1, -1}
-	m_pwrite((FILE*)NULL)
+	verbose(verbose),
+	m_name(args[0]),
+	m_pid((pid_t)NULL),
+	m_writepipe {-1, -1},
+	m_readpipe {-1, -1},
+	m_pwrite((FILE*)NULL),
 	m_pread((FILE*)NULL)
 {
 	if(pipe(m_writepipe) < 0)
@@ -67,19 +68,6 @@ Process::~Process()
 		perror("~Process waitpid failed");
 	}
 	fclose(m_pread);
-}
-
-Process::Process(const std::vector<char*>& args)
-{
-	Process(args, false);
-}
-
-Process::Process(const Process &p)
-{
-}
-
-Process::Process(Process&& other)
-{
 }
 
 void Process::write(const std::string& string)

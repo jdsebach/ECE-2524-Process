@@ -26,8 +26,8 @@ public:
     Process& operator=(const Process &p);
 
     //Implement a move constructor
-    Process(Process&& other);
-    Process& operator=(Process&& other);
+    //Process(Process&& other);
+    //Process& operator=(Process&& other);
 
     ~Process();
 
