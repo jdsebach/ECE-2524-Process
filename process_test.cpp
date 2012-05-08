@@ -25,7 +25,7 @@ args.push_back(argv[nn]);
     {
 Process myproc(args,true);
 sleep(5);
-    /* write/read test
+    // write/read test
 for(int n=0; n<5; ++n) {
 stringstream ss(line);
 ss << "This is test " << n << endl;
@@ -35,7 +35,7 @@ myproc.write(line);
 output = myproc.read();
 cerr << "output from process: " << output << "END" << endl;
 }
-*/
+
 cerr << "Process object destroyed" << endl;
     }
     cerr << "Program exiting. Confirm child process has been cleaned up." << endl;

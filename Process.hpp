@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define PARENT_READ m_readpipe[0]
 #define CHILD_WRITE m_readpipe[1]

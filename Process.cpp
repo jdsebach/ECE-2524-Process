@@ -1,7 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/wait.h>
 #include "Process.hpp"
 
 Process::Process(const std::vector<char*>& args, bool verbose) :
@@ -33,10 +29,13 @@ Process::Process(const std::vector<char*>& args, bool verbose) :
 	}
 	else if(m_pid == 0)
 	{
+		//Close pipes
 		close(PARENT_READ);
 		close(PARENT_WRITE);
+		//Make CHILD_READ connect to stdin and close
 		dup2(CHILD_READ, 0);
 		close(CHILD_READ);
+		//Make CHILD_WRITE connect to stdout and close
 		dup2(CHILD_WRITE, 1);
 		close(CHILD_WRITE);
 		
@@ -44,12 +43,16 @@ Process::Process(const std::vector<char*>& args, bool verbose) :
 	}
 	else
 	{
+		//Close pipes
 		close(CHILD_READ);
 		close(CHILD_WRITE);
 		if(verbose)
 		{
 			std::cerr << "The process '" << m_name << "' forked the PID '" << m_pid << "'" << std::endl;
 		}
+		//Open the iostreams for test
+		m_pwrite=fdopen(PARENT_WRITE, "w");
+		m_pread=fdopen(PARENT_READ, "r");
 	}
 };
 
@@ -59,15 +62,19 @@ Process::~Process()
 	{
 		std::cerr << "Process '" << m_name << "': Entering ~Process()" << std::endl;
 	}
-	kill(m_pid, SIGTERM);
+	//Close iostreams
+	fclose(m_pread);
 	fclose(m_pwrite);
+	kill(m_pid, SIGTERM);
 	int status;
 	pid_t pid = waitpid(m_pid, &status, 0);
 	if(pid < 0)
 	{
 		perror("~Process waitpid failed");
 	}
-	fclose(m_pread);
+	//Close whats left of pipes
+	close(PARENT_READ);
+	close(PARENT_WRITE);
 }
 
 void Process::write(const std::string& string)
